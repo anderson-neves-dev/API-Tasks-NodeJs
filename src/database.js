@@ -1,6 +1,14 @@
+import { Console } from 'node:console';
 import fs from 'node:fs/promises'
 
 const databasePath = new URL('../db.json', import.meta.url)
+
+
+
+const dataNowBrasil = (() => {
+    const dataNow = new Date()
+    return dataNow.toLocaleString();
+})
 
 export class Database {
     #database = {}
@@ -50,6 +58,20 @@ export class Database {
             this.#persist()
         }
     }
+
+    put(table, id, data) {
+        const rowIndex = this.#database[table].findIndex(row => row.id === id)
+
+        if (rowIndex > -1) {
+            console.log(data.title, data.description)
+            this.#database[table][rowIndex].title = data.title ? data.title : this.#database[table][rowIndex].title
+            this.#database[table][rowIndex].description = data.description ? data.description : this.#database[table][rowIndex].description
+            this.#database[table][rowIndex].update_at = dataNowBrasil()
+            this.#persist()
+        }
+    }
+
+
 
 
 }
