@@ -1,6 +1,10 @@
 import { Database } from "../database.js";
 import { buildRoutePath } from "./utils/buil-route-path.js";
+import { randomUUID } from 'node:crypto';
 
+
+const dataNow = new Date()
+const dataNowBrasil = dataNow.toLocaleString();
 const database = new Database
 
 export const routes = [
@@ -23,8 +27,12 @@ export const routes = [
         handler: (req, res) => {
             const { title, description } = req.body
             const task = {
+                id: randomUUID(),
                 title,
-                description
+                description,
+                created_at: dataNowBrasil,
+                completed_at: null,
+                update_at: dataNowBrasil,
             }
             database.insert('Tasks', task)
             return res.writeHead(201).end()
