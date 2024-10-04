@@ -3,13 +3,6 @@ import fs from 'node:fs/promises'
 
 const databasePath = new URL('../db.json', import.meta.url)
 
-
-
-const dataNowBrasil = (() => {
-    const dataNow = new Date()
-    return dataNow.toLocaleString();
-})
-
 export class Database {
     #database = {}
 
@@ -63,15 +56,10 @@ export class Database {
         const rowIndex = this.#database[table].findIndex(row => row.id === id)
 
         if (rowIndex > -1) {
-            console.log(data.title, data.description)
-            this.#database[table][rowIndex].title = data.title ? data.title : this.#database[table][rowIndex].title
-            this.#database[table][rowIndex].description = data.description ? data.description : this.#database[table][rowIndex].description
-            this.#database[table][rowIndex].update_at = dataNowBrasil()
+            const row = this.#database[table][rowIndex]
+            this.#database[table][rowIndex] = { id, ...row, ...data }
             this.#persist()
         }
     }
-
-
-
 
 }
